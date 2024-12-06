@@ -48,7 +48,7 @@ public class BibliothequeServiceTest {
         when(jwtTokenUtils.getPerimetreFormToken(token)).thenReturn()
     }*/
 
-    /*
+
     @Test
     public void testServiceGetPlanActionById() throws Exception {
 
@@ -218,5 +218,5 @@ public class BibliothequeServiceTest {
         Page<PlanActionDto> dtoResponse = planActionService.getPlansActions(0, 5);
         assertThat(dtoResponse).contains(planActionDto1, planActionDto2);
     }
-    */
+
 }

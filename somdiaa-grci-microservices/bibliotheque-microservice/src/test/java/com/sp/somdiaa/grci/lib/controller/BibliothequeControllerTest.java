@@ -58,7 +58,7 @@ public class BibliothequeControllerTest {
 
     }
 
-    /*
+
     @Test
     public void testGetPlansActions() throws Exception{
 
@@ -255,5 +255,4 @@ public class BibliothequeControllerTest {
         assertThat(dtoResponse.getData()).isEqualTo(planActionDto);
     }
 
-     */
 }
