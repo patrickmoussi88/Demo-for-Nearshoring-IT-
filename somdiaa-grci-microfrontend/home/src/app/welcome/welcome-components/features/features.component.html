@@ -1,0 +1,19 @@
+<div class="row hidden-md-up">
+
+    <div class="col-md-3" *ngFor="let feature of featuresData">
+        <ng-container *appAuthorize='feature.authorities'>
+            <a href="{{feature.link | moduleUrl}}"  (click)="changePage(feature.link)" class="a-noline">
+                <div class="card">
+
+                    <div class="card-block">
+                        <img [src]="feature.src | assertUrl" class="icon-fonctionnalite" [alt]="">
+                        <h5 class="card-title">{{feature.title}}</h5>
+                    </div>
+
+                </div>
+            </a>
+        </ng-container>
+
+    </div>
+</div><br>
+<br><br>

@@ -1,0 +1,162 @@
+<!-- Topbar -->
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+  <!-- Sidebar Toggle (Topbar) -->
+  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+    <i class="fa fa-bars"></i>
+  </button>
+
+  <!-- Topbar Search
+  <img [src]="dashbordData.languageIcon.src | assertUrl" [alt]="dashbordData.languageIcon.alt"> &emsp;
+  <select name="langue" id="translate">
+    <option value="Français">FR</option>
+    <option value="Anglais">AN</option>
+  </select>
+   -->
+  <!-- Topbar Navbar -->
+  <ul class="navbar-nav ml-auto">
+    <li class=" d-none li-filtre d-sm-block dropdown no-arrow ">
+      <form class="form-inline mr-auto  w-100 navbar-search">
+
+        <div class="input-group">
+          <select class="form-select form-control form-select-lg mb-3 select-filtre"
+                  aria-label=".form-select-lg example" (change)="onPerimetreValue($event,'perimertreId')">
+            <option selected *ngIf="!perimetreList">Périmètres</option>
+            <option *ngFor="let perimetre of perimetreList?perimetreList:null" [value]="perimetre.id" [selected]="perimetreSelected==perimetre.id" >{{perimetre.name}}</option>
+
+          </select>
+        </div>
+        &nbsp;
+
+        <!--div class="input-group" >
+          <select class="form-select form-control form-select-lg mb-3 select-filtre"
+                  aria-label=".form-select-lg example">
+            <option>Filiales</option>
+            <ng-container *ngFor="let perimetre of perimetreList?perimetreList:null">
+              <option *ngIf="perimetre.affiliate">{{perimetre.name}}</option>
+            </ng-container>
+
+          </select>
+        </div-->
+        &nbsp;
+        <div class="input-group">
+          <select class="form-select form-control form-select-lg mb-3 select-filtre"
+                  aria-label=".form-select-lg example"  (change)="onMetierValue($event,'metierId')">
+            <option selected *ngIf="!metiersList" >Métiers</option>
+            <option  *ngFor="let metier of metiersList?metiersList:null" [value]="metier.id" [selected]="metierSelected==metier.id">{{metier.name}}</option>
+          </select>
+        </div>
+        &nbsp;
+      </form>
+    </li>
+
+    <!-- Nav Item - Alerts -->
+    <li class="nav-item dropdown no-arrow mx-1  " *ngIf="notificationList" >
+      <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img [src]="dashbordData.bellSvg.src | assertUrl" [alt]="dashbordData.bellSvg.alt">
+        <!-- Counter - Alerts -->
+        <span class="badge badge-danger badge-counter">3+</span>
+      </a>
+
+      <!-- Dropdown - Alerts -->
+      <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in " aria-labelledby="alertsDropdown">
+        <h6 class="dropdown-header">
+          notification Center
+        </h6>
+        <div class="scrollbar-style overflow-y max-h-500">
+          <a class="dropdown-item d-flex align-items-center" href="#" *ngFor="let notification  of  notificationList.content!">
+            <div class="mr-3">
+              <div class="icon-circle {{notification.messageLevel==MessageLevel.INFO?'bg-primary':notification.messageLevel==MessageLevel.WARNING?'bg-warning':'bg-danger'}} ">
+                <i class="fas fa-file-alt text-white"></i>
+              </div>
+            </div>
+            <div>
+              <div class="small text-gray-500">{{notification.date | date:'medium'}}</div>
+              <span class="font-weight-bold">{{notification.content}}</span>
+            </div>
+          </a>
+          <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+        </div>
+
+      </div>
+    </li>
+
+
+    <div class="topbar-divider d-none d-sm-block"></div>
+
+    <!-- Nav Item - User Information -->
+    <li class="nav-item dropdown no-arrow">
+      <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{name}}</span>
+        <img class="img-profile rounded-circle" [src]="dashbordData.profilSvg.src | assertUrl" [alt]="dashbordData.profilSvg.alt">
+      </a>
+      <!-- Dropdown - User Information -->
+      <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+           aria-labelledby="userDropdown">
+        <ng-container *ngFor="let profile of profileFuntions">
+          <a class="dropdown-item" *ngIf="profile.index!=1" [href]="profile.link">
+            <i class="fas {{profile.class}} fa-sm fa-fw mr-2 text-gray-400"></i>
+            {{profile.description}}
+          </a>
+          <a class="dropdown-item" *ngIf="profile.index==1" (click)="openLogoutModal()">
+            <i class="fas {{profile.class}} fa-sm fa-fw mr-2 text-gray-400"></i>
+            {{profile.description}}
+          </a>
+
+        </ng-container>
+
+      </div>
+    </li>
+
+  </ul>
+
+</nav>
+<!-- End of Topbar -->
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Sélectionnez «logout» ci-dessous si vous voulez mettre fin à votre session en cours.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" #closeModal type="button" data-dismiss="modal">Annuler</button>
+        <a class="btn btn-primary" (click)="logout()">Déconnexion</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ---------------------- Modal error ------------------------- -->
+
+<div class="modal fade" id="errorModalTemplate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <div class="modal-body text-center p-3">
+          <br>
+          <img  [src]="errorIcon | assertUrl" width="60%" alt="">
+          <br>
+          <br>
+          <p class="h3 font-weight-bold">Oups !</p>
+          <p class="h5 p-3">{{errorMessage}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-dark btn-block"  data-dismiss="modal" aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Page body page -->

@@ -1,0 +1,198 @@
+
+<!-- Begin Page Content --------------------------------------------------------------------------------------->
+
+<nav class="navbar navbar-expand-lg navbar-light " id="second-bar">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <span class="nav-item nav-link second-menu cursor"(click)="redirectTo('bibliotheque')" >Bibliothèque</span>
+      <span class="nav-item nav-link active second-menu cursor" (click)="redirectTo('bibliotheque-archives')" >Archives</span>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-12 p-3">
+      <!-- Page Heading -->
+      <div class="d-flex  justify-content-between title-heading">
+        <div class="">Archives
+          <p class=" text-gray-500 arean-fil-dashboard">Accueil <span class="text-gray-800"> &gt; Archives</span> </p>
+        </div>
+
+        <div class="d-flex p-2">
+
+          <a href="" class="a-noline p-2" href="#" role="button" id="trie" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class=" btn shadow"  id="btn-white-rounded"> <img [src]="images.imageTriesIcon | assertUrl" alt=""> Tier par</button>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-width shadow rounded animated--fade-in" aria-labelledby="trie">
+
+            <div class="p-2">Afficher</div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Tous les éléments </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Dossiers </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Fichiers PDF </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Fichiers WORD </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Fichiers EXCEL </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Fichiers IMAGES </label>
+              </div>
+            </div>
+            <div class="dropdown-item">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="">
+                <label> Autres </label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Modal Restore  -->
+      <div class="modal fade" id="modalRestore"  tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog largeur-modal" role="document">
+          <div class="modal-content">
+
+            <div class="modal-body text-center p-3">
+              <br>
+              <img [src]="images.imageOk | assertUrl" width="60%" alt="">
+              <br>
+              <br>
+              <p class="h3 font-weight-bold">Restauration éffectué avec succès</p>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark btn-block" class="close" data-dismiss="modal" aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------------------- Modal error and delete ------------------------- -->
+
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-body">
+              <div class="modal-body text-center p-3">
+                <br>
+                <img [src]="images.imageErrorModal | assertUrl" width="60%" alt="">
+                <br> <br>
+                <p class="h3 font-weight-bold">Attention cet élément va être restauré</p>
+                <p class="h5 p-3">Approuvez-vous cette action ? </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">Non &emsp;</button>
+                <button type="button" class="btn btn-danger" class="close" data-dismiss="modal" (click)="restoreDocument()" aria-label="Close">Oui, restaurer &emsp; <i class="fa fa-chevron-right"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row p-3">
+        <div class="col-12 col-md-3">
+          <!-- Search form -->
+          <form #searchForm="ngForm" (ngSubmit)="getDocumentsByName(searchForm)" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="input-group">
+              <input type="text" [(ngModel)]="nomDocument" name="searchByName"
+                     class="form-control bg-light border small" placeholder="Rechercher"
+                     aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row" >
+
+        <div class="table-config" >
+          <table class="table text-gray-500 " id="bibliotheque-table">
+            <thead>
+            <tr>
+              <th scope="col"> Type </th>
+              <th scope="col">  Nom </th>
+              <th scope="col"><a href=""><img [src]="images.imageFlechesTries | assertUrl" alt=""></a> Taille</th>
+              <th scope="col">Inséré le:</th>
+              <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let documentItem of listDocument$ | async" >
+                <td scope="row">
+                  <a href="" class="a-noline"> <img [src]="getMymeType(documentItem.isFolder, documentItem.fileName) | assertUrl" alt=""> </a>
+                </td>
+                <td scope="row"  > <span> {{documentItem.titre}} </span> </td>
+                <td>  </td>
+                <td> <span>{{documentItem.dateCreate | date}}</span> </td>
+                <td>
+                  <div class="dropdown no-arrow">
+                    <span href="#" *ngIf="documentItem.isSupprim && !documentItem.isFolder" (click)="downloadFile(documentItem.id, documentItem.fileName)" class="a-noline">
+                      <img [src]="images.imageDownloadBlack | assertUrl" alt="">
+                    </span>
+                    <a href="" *ngIf="!documentItem.isSupprim || documentItem.isFolder" class="a-noline"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </a>
+                    &nbsp;
+                    <a class="dropdown-toggle" href="#" role="button" id="Action-controle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                      <img [src]="images.imageTroisPoints | assertUrl" alt="">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-width shadow animated--fade-in"
+                         aria-labelledby="Action-controle">
+                      <span class="dropdown-item" data-target="#deleteModal" data-toggle="modal" (click)="setIdDocumentToRestore(documentItem.id)">
+                        <img [src]="images.imageUploadIcon | assertUrl" alt=""> &ensp; Restaurer
+                      </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Page body page -->
+
+</div>
+<!-- END Page Content ----------------------------------------------------------------------------------------------->
+

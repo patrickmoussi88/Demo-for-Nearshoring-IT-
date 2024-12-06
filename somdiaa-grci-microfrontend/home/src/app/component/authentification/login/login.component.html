@@ -1,0 +1,101 @@
+<div >
+    <div class="container container-log">
+
+        <div class=" o-hidden border-0">
+            <div class="logbody p-0 ">
+                <!-- Nested Row within Card Body -->
+                <div class="row loginbody">
+                    <div class="col-lg-4 d-none d-lg-block leftzonelog">
+                        <div class="leftlogin">
+                            <div class="zonelogo">
+                                <img [src]="homeData.logoImage.src | assertUrl" class="logo" [alt]="homeData.logoImage.alt">
+                            </div>
+                        </div>
+                        <div class="textlogin">
+                            <p>Accéder à l'outil de <strong> Contrôle interne</strong></p>
+                        </div>
+                        <p class="textlogin-2">Solutions digitales de gestion des risques et de
+                            contrôle interne
+                        </p>
+
+                        <div class="zonelogo-img">
+                            <img [src]="homeData.amicoImage.src | assertUrl" [alt]="homeData.amicoImage.alt">
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="zonelogo-hid d-block d-sm-none">
+                            <img [src]="homeData.logoImage.src | assertUrl" class="logo-hid" [alt]="">
+                        </div>
+                        <div class="p-5">
+
+                            <div class="">
+                                <P class="acces">Accès sécurisé</P>
+                                <h3 class="h4 text-gray-900 mb-4">se connecter pour accéder</h3>
+                            </div>
+                            <form class="user" (submit)="login()" [formGroup]="loginForm"   >
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" (blur)="onBlurInput()" aria-describedby="emailHelp"  [ngClass]="{'is-invalid':(submitted && getControls.username.errors)} " formControlName="username" placeholder="Nom d'utilisateur">
+                                    <span *ngIf="submitted && getControls.username.errors">
+                                        <span class="text-danger" *ngIf="getControls.username.errors.required">Champ username requis</span>
+                                    </span>
+                                    <span *ngIf="submitted && getControls.username.errors">
+                                        <span class="text-danger" *ngIf="getControls.username.errors.email">email invalide</span>
+                                    </span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="password" class="form-control form-control-user" (blur)="onBlurInput()" formControlName="password" placeholder="Mot de passe"  [ngClass]="{'is-invalid':(submitted && getControls.password.errors) } ">
+                                    <span *ngIf="submitted && getControls.password.errors">
+                                        <span class="text-danger" *ngIf="getControls.password.errors.required">Champ password requis</span>
+                                    </span>
+                                    <span *ngIf="submitted && getControls.password.errors&& !getControls.password.errors.required">
+                                        <span class="text-danger" *ngIf="!getControls.password.errors.minLength">le mot de passe doit avoir 8 charatere au minimun </span>
+                                    </span>
+                                </div>
+                                <div class="form-group fogotpass">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck" formControlName="isSessionOpen" >
+                                        <label class="custom-control-label" for="customCheck" >Garder ma session ouverte </label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox small text-right">
+                                        <a class="text-primary" role="button"  (click)="goToForgotPasswordPage()">&emsp;&emsp;&ensp; Mot de passe oublié?</a>
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary btn-user btn-block"   > Se connecter </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ---------------------- Modal error ------------------------- -->
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="modal-body text-center p-3">
+                    <br>
+                    <img  [src]="errorIcon | assertUrl" width="60%" alt="">
+                    <br>
+                    <br>
+                    <p class="h3 font-weight-bold">Oups !</p>
+                    <p class="h5 p-3">{{errorMessage}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark btn-block"  data-dismiss="modal" aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Page body page -->

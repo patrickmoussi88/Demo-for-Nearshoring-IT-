@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <div class="row hidden-md-up">
+            <div class="col-md-12" *ngFor="let module of homeData.moduleList">
+                <div class="card" *ngIf="module.index == 0 || module.index == 2 || module.index == 6">
+                    <div class="card-block">
+                        <img [src]="module.src | assertUrl" class="icon-fonctionnalite" [alt]="module.alt">
+                        <h5 class="card-title">{{module.title}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <br><br>
+        <div class="row hidden-md-up">
+            <div class="col-md-12" *ngFor="let module of homeData.moduleList">
+                    <div class="card" *ngIf="module.index == 1 || module.index == 3" >
+                        <div class="card-block">
+                            <img [src]="module.src | assertUrl" class="icon-fonctionnalite" [alt]="module.alt">
+                            <h5 class="card-title">{{module.title}}</h5>
+                        </div>
+                    </div>
+
+            </div>
+            <div class="col-md-12">
+                <br>
+                <a class="btn-lg-black btn-primary btn-block a-noline btn-connexion" routerLink="home/authentication/login" >Démarrer</a>
+            </div>
+        </div>
+    </div>
+</div>
+<br> <br><br> <br>

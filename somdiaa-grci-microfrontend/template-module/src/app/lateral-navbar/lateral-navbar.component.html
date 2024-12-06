@@ -1,0 +1,57 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+        <div class="sidebar-brand-icon">
+            <img [src]="data.somdiaaImage.src | assertUrl" width="125" [alt]="data.somdiaaImage.alt">
+        </div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Nav Item - Dashboard -->
+    <!--li class="nav-item active">
+        <a class="nav-link" href="Dashboard.html">
+            <img [src]="data.dashbordImage.src | assertUrl" class="icon-menu" [alt]="data.dashbordImage.alt">
+            <span>{{data.dashbordImage.title}}</span></a>
+    </li-->
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item" *ngFor="let feature of features">
+      <ng-container *appAuthorize='feature.authorities'>
+        <a class="nav-link" [ngClass]="{collapsed : feature.collapse}" (click)="changeFeature(feature)" [attr.data-toggle]="feature.collapse ? 'collapse' : ''" [attr.data-target]="feature.id | hashLink"
+           aria-expanded="true" aria-controls="collapseTwo">
+          <img [src]="feature.src | assertUrl" class="icon-menu" [alt]="feature.alt">
+          <span>{{feature.title}}</span>
+        </a>
+        <div *ngIf="feature.collapse" [id]="feature.id" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-sous-menu py-2 collapse-inner rounded">
+            <ng-container  *ngFor="let item of feature.items">
+              <a  *appAuthorize='item.authorities' class="collapse-item {{item.class}}" (click)="changeItem(item)">{{item.name}}</a>
+            </ng-container>
+
+          </div>
+        </div>
+      </ng-container>
+
+    </li>
+
+    <!-- Divider >
+    <hr class="sidebar-divider"-->
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+
+    </div>
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+

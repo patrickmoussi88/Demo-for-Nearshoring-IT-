@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand navbar-light bg-white  mb-4 static-top topbar top-menu-landing" id="topbar-accueil">
+
+    <app-logo-somdiaa></app-logo-somdiaa>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <span class="text-gray-800 d-none d-lg-block ">Aide &ensp;</span>
+            </a>
+
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header"> Que voulez-vous savoir? </h6>
+                <a class="dropdown-item d-flex align-items-center" *ngFor="let module of homeData.moduleList" href="#">
+                    <div class="font-weight-bold">
+                        <div class="text-truncate">{{module.title}}</div>
+                    </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+            </div>
+        </li>
+
+        <li class="nav-item dropdown no-arrow mx-1 btn-connexion">
+            <a routerLink="home/authentication/login" class="btn btn-primary" id="btn-connexion">se connecter</a>
+        </li>
+
+        <app-language></app-language>
+    </ul>
+</nav>

@@ -1,0 +1,380 @@
+<!-- Begin Page Content --------------------------------------------------------------------------------------->
+
+<nav class="navbar navbar-expand-lg navbar-light " id="second-bar">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <span class="nav-item nav-link active second-menu cursor" (click)="redirectTo('bibliotheque')" >Bibliothèque</span>
+      <span class="nav-item nav-link  second-menu cursor" (click)="redirectTo('bibliotheque-archives')" >Archives</span>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-md-10 border-right">
+      <!-- Page Heading -->
+      <div class="d-flex  justify-content-between title-heading">
+        <div class="">Bibliothèque
+          <p class=" text-gray-800 arean-fil-dashboard" *ngIf="filAriane$ | async as fileAriane" > {{fileAriane.data}} </p>
+        </div>
+
+        <div class="d-flex p-2">
+          <a href="" class="a-noline p-2" data-target="#modalNewFile" data-toggle="modal">
+            <button type="button" class=" btn btn-outline-primary  btn-lg" style="border-radius: 50px;">
+              <small class="d-none d-md-block"><i class="fas fa-file"></i> Nouveau Document </small>
+              <i class="fas fa-file d-block d-md-none"></i>
+            </button>
+          </a>
+          <!--a href="" class="a-noline p-2" data-target="#modalNewFolder" data-toggle="modal">
+            <button type="button" class=" btn btn-primary btn-lg" id="btn-blue-rounded">
+              <small class="d-none d-md-block"><i class="fas fa-folder"></i> Nouveau dossier </small>
+              <i class="fas fa-folder d-block d-md-none"></i>
+            </button>
+          </a-->
+
+        </div>
+      </div>
+
+      <!-- Modal Nouveau fichier -->
+      <form [formGroup]="newDocument" class="modal fade" id="modalNewFile" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+        <div class="modal-dialog largeur-modal" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title h4 font-weight-bold">Nouveau document</h5>
+              <button type="button" class="close circle" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body p-3">
+              <div class="mb-3">
+                <p>Type de document </p>
+                <label for="folder" class="form-label">Dossier </label>&nbsp;
+                <input type="radio" id="folder" name="isFolder" formControlName="isFolder" checked value="true">
+                &nbsp;&nbsp;&nbsp;
+                <label for="file" class="form-label">Fichier </label>&nbsp;
+                <input type="radio" id="file" name="isFolder" formControlName="isFolder" value="false">
+              </div>
+              <div class="mb-3">
+                <label for="titreDocument" class="form-label">Titre du document</label>
+                <input type="text" class="form-control" id="titreDocument" formControlName="titre">
+              </div>
+              <div class="mb-3">
+                <label for="documentDescription" class="form-label">Description du document</label>
+                <input type="text" class="form-control" formControlName="description" id="documentDescription">
+              </div>
+              <div class="mb-3" *ngIf="treeDocumentNode$ | async">
+                <label for="documentTreeNode" class="form-label">Dossier parent</label>
+                <!--select name="" formControlName="document" class="form-select" id="documentTreeNode">
+                  <option *ngFor="let documentNode of treeNode " value="{{JSON.stringify(documentNode.document)}}">{{documentNode.document.titre}}</option>
+                </select-->
+
+                <cdk-tree class="form-select" id="documentTreeNode" [dataSource]="dataSource"
+                          [treeControl]="treeControl">
+                  <cdk-nested-tree-node *cdkTreeNodeDef="let node" class="example-tree-node">
+                    <mat-radio-button (click)="selectNode(node)">{{node.titre}}</mat-radio-button>
+                  </cdk-nested-tree-node>
+
+                  <cdk-nested-tree-node *cdkTreeNodeDef="let node; when: hasChild" class="example-tree-node">
+                    <button mat-icon-button [attr.aria-label]="'toggle ' + node.titre" cdkTreeNodeToggle>
+                      <img class="mat-icon-rtl-mirror"
+                           src="{{treeControl.isExpanded(node) ? (images.imageExpandMore | assertUrl) : (images.imageChevronRight | assertUrl) }}">
+                    </button>
+                    <mat-radio-button (click)="selectNode(node)">{{node.titre}}</mat-radio-button>
+                    <div [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                      <ng-container cdkTreeNodeOutlet></ng-container>
+                    </div>
+                  </cdk-nested-tree-node>
+                </cdk-tree>
+
+              </div>
+
+              <div class="mb-3">
+                <label for="natureDocument" class="form-label">Nature du document</label>
+                <select name="" formControlName="nature" class="form-select" id="natureDocument">
+                  <option value="PROCEDURE">PROCEDURE</option>
+                  <option value="STANDARD">STANDARD</option>
+                  <option value="JUSTIFICATIF">JUSTIFICATIF</option>
+                  <option value="ARCHIVE">ARCHIVE</option>
+                  <option value="AUTRE">AUTRE</option>
+                </select>
+              </div>
+
+              <!-- ---------------- code drap and drop file -->
+
+              <fieldset *ngIf="document$ | async as document" [hidden]="!(document.isFolder == 'false')"
+                        class="upload_dropZone text-center mb-3 p-4">
+
+                <legend class="visually-hidden">Importer le Fichier</legend>
+                <svg class="upload_svg" width="60" height="60" aria-hidden="true">
+                  <use href="#icon-imageUpload"></use>
+                </svg>
+                <p class="small my-2">{{this.file.name}}</p>
+                <input id="upload_image_background" data-post-name="image_background"
+                       data-post-url="https://someplace.com/image/uploads/backgrounds/"
+                       class="position-absolute invisible" type="file"
+                       accept="image/jpeg, image/JPG, image/png, image/svg+xml"
+                       (change)="onFileChange($event)"/>
+                <label class="btn btn-secondary btn-upload mb-3" for="upload_image_background">Parcourir</label>
+                <div class="upload_gallery d-flex flex-wrap justify-content-center gap-3 mb-0"></div>
+              </fieldset>
+
+              <svg style="display:none">
+                <defs>
+                  <symbol id="icon-imageUpload" clip-rule="evenodd" viewBox="0 0 96 96">
+                    <path
+                      d="M47 6a21 21 0 0 0-12.3 3.8c-2.7 2.1-4.4 5-4.7 7.1-5.8 1.2-10.3 5.6-10.3 10.6 0 6 5.8 11 13 11h12.6V22.7l-7.1 6.8c-.4.3-.9.5-1.4.5-1 0-2-.8-2-1.7 0-.4.3-.9.6-1.2l10.3-8.8c.3-.4.8-.6 1.3-.6.6 0 1 .2 1.4.6l10.2 8.8c.4.3.6.8.6 1.2 0 1-.9 1.7-2 1.7-.5 0-1-.2-1.3-.5l-7.2-6.8v15.6h14.4c6.1 0 11.2-4.1 11.2-9.4 0-5-4-8.8-9.5-9.4C63.8 11.8 56 5.8 47 6Zm-1.7 42.7V38.4h3.4v10.3c0 .8-.7 1.5-1.7 1.5s-1.7-.7-1.7-1.5Z M27 49c-4 0-7 2-7 6v29c0 3 3 6 6 6h42c3 0 6-3 6-6V55c0-4-3-6-7-6H28Zm41 3c1 0 3 1 3 3v19l-13-6a2 2 0 0 0-2 0L44 79l-10-5a2 2 0 0 0-2 0l-9 7V55c0-2 2-3 4-3h41Z M40 62c0 2-2 4-5 4s-5-2-5-4 2-4 5-4 5 2 5 4Z"/>
+                  </symbol>
+                </defs>
+              </svg>
+
+            </div>
+            <div class="modal-footer">
+              <button type="submit" [disabled]="newDocument.invalid" (click)="onSubmitForm()"
+                      class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalvalidation"
+                      data-dismiss="modal">Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Modal Archiver  -->
+      <div class="modal fade" id="modalArchiver" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog largeur-modal" role="document">
+          <div class="modal-content">
+
+            <div class="modal-body text-center p-3">
+              <br>
+              <img [src]="images.imageOk | assertUrl" width="60%" alt="">
+              <br><br>
+              <p class="h3 font-weight-bold">Archivage éffectué avec succès</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark btn-block" class="close" data-dismiss="modal"
+                      aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- -------------------------------- Confirmation valisation modal ------------ -->
+
+      <div class="modal fade" id="modalvalidation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabe2"
+           aria-hidden="true">
+        <div class="modal-dialog largeur-modal" role="document">
+          <div class="modal-content">
+            <div class="modal-body text-center p-3">
+              <br>
+              <img [src]="images.imageOk | assertUrl" width="60%" alt="">
+              <br><br>
+              <p class="h3 font-weight-bold">Parfait !</p>
+              <p class="h5 p-3">Le fichier à été chargé avec succès </p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark btn-block" class="close" data-dismiss="modal"
+                      aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------------------- Modal error and delete ------------------------- -->
+
+      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+           aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+
+            <div class="modal-body">
+              <div class="modal-body text-center p-3">
+                <br>
+                <img [src]="images.imageErrorModal | assertUrl" width="60%" alt="">
+                <br><br>
+                <p class="h3 font-weight-bold">Attention cet élément va être supprimer</p>
+                <p class="h5 p-3">Approuvez-vous cette action ? </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal" aria-label="Close">Non &emsp;</button>
+                <button type="button" class="btn btn-danger" class="close" (click)="deleteDocument()" data-dismiss="modal" aria-label="Close">Oui,
+                  supprimer &emsp; <i class="fa fa-chevron-right"></i></button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row p-3">
+        <div class="col-12 col-md-3">
+          <!-- Search form -->
+          <form #searchForm="ngForm" (ngSubmit)="getDocumentsByName(searchForm)" tabindex="-1"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="input-group">
+              <input type="text" name="searchByName" [(ngModel)]="nomDocument"
+                     class="form-control bg-light border small"
+                     placeholder="Rechercher" aria-label="Search" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" type="submit">
+                  <i class="fas fa-search fa-sm"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="table-config">
+          <table class="table text-gray-800" id="bibliotheque-table">
+            <thead>
+              <tr>
+                <th scope="col"> TYPE</th>
+                <th scope="col" class="w-25"> NOM</th>
+                <th scope="col" class="w-25"> DESCRIPTION</th>
+                <th scope="col"> NATURE</th>
+                <!--th scope="col"><a href=""><img [src]="images.imageFlechesTries | assertUrl" alt=""></a> TAILLE</th-->
+                <th scope="col">INSERER LE :</th>
+                <th scope="col">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="selectedNode != 0">
+                <td scope="row">
+                  <span href="" class="a-noline"> <img [src]="images.imageFolder | assertUrl" alt=""> </span>
+                </td>
+                <td scope="row" class="cursor" (dblclick)="getDocumentParent()">
+                  <img [src]="images.imageTroisPoints | assertUrl" alt="">
+                </td>
+                <td></td>
+                <td><span> </span></td>
+                <td></td>
+              </tr>
+              <tr *ngFor="let documentItem of listDocument$ | async">
+                <td scope="row">
+                  <span class="a-noline">
+                    <img [src]="getMymeType(documentItem.isFolder, documentItem.fileName) | assertUrl" alt="">
+                  </span>
+                </td>
+                <td scope="row" [ngClass]="{cursor: documentItem.isFolder}" class="cursor" (dblclick)="getDocumentChilds(documentItem)">
+                  <span> {{documentItem.titre}} </span>
+                </td>
+                <td scope="row">
+                  <span> {{documentItem.description}} </span>
+                </td>
+                <td scope="row">
+                  <span> {{documentItem.nature}} </span>
+                </td>
+                <td><span>{{documentItem.dateCreate | date}}</span></td>
+                <td>
+                  <div class="dropdown no-arrow">
+                    <span href="#" *ngIf="documentItem.isSupprim && !documentItem.isFolder"
+                          (click)="downloadFile(documentItem.id, documentItem.fileName)" class="a-noline">
+                      <img [src]="images.imageDownloadBlack | assertUrl" alt="">
+                    </span>
+                    <a href="" *ngIf="!documentItem.isSupprim || documentItem.isFolder" class="a-noline"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </a>
+                    &nbsp;
+                    <a class="dropdown-toggle" href="#" role="button" id="Action-controle" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" *ngIf="documentItem.isSupprim">
+                      <img [src]="images.imageTroisPoints | assertUrl" alt="">
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-width shadow animated--fade-in"
+                         aria-labelledby="Action-controle">
+                      <span class="dropdown-item text-danger" *ngIf="documentItem.isSupprim" data-target="#deleteModal"
+                            data-toggle="modal" (click)="setIdDocumentToDelete(documentItem.id)">
+                        <i class="fa fa-trash "></i>&ensp; Supprimer </span>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 d-none d-md-block  p-3">
+      <h4 class="p-3 h3 font-weight-bold text-gray-700 mb-20">Accès rapide</h4>
+
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imagePdfFile | assertUrl" alt="" width="50px">
+          </div>
+          <div class="p-2">
+            <div>PDF</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imageWordFrame | assertUrl" alt="">
+          </div>
+          <div class="p-2">
+            <div>Word</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imageExcelFrame | assertUrl" alt="">
+          </div>
+          <div class="p-2">
+            <div>Excel</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imagePptFrame | assertUrl" alt="">
+          </div>
+          <div class="p-2">
+            <div>PowerPt</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imageImageFrame | assertUrl" alt="">
+          </div>
+          <div class="p-2">
+            <div>Images</div>
+          </div>
+        </div>
+
+      </div>
+      <div class="border p-2 mb-20 d-flex justify-content-between dropdown-item" role="button">
+        <div class="d-flex">
+          <div>
+            <img [src]="images.imageOtherFrame | assertUrl" alt="">
+          </div>
+          <div class="p-2">
+            <div>Autres</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Page body page -->
+
+</div>
+<!-- END Page Content ----------------------------------------------------------------------------------------------->
+

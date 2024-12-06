@@ -1,0 +1,139 @@
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow top-menu-landing-box"
+     id="topbar-accueil">
+    <app-logo-somdiaa></app-logo-somdiaa>
+    <ul class="navbar-nav ml-auto">
+
+        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+        <li class="nav-item dropdown no-arrow d-sm-none">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                 aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+        <!-- Nav Item - Messages -->
+        <li class="nav-item second-menu-config active dropdown no-arrow mx-1 d-none d-lg-block">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">
+                <span class="text-gray-800">Accueil &ensp;</span>
+                <!-- Counter - Messages -->
+            </a>
+            <!-- Dropdown - Messages -->
+        </li>
+
+        <!-- Nav Item - Messages -->
+        <!--li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="text-gray-800 d-none d-lg-block ">Fonctionnalités &ensp;</span>
+                <img [src]="homeData.troisPoints.src | assertUrl" [alt]="homeData.troisPoints.alt">
+                <-- Counter - Messages --/>
+            </a>
+            <-- Dropdown - Messages --/>
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header"> Toutes les fonctionnalités </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#" *ngFor="let module of homeData.moduleList">
+                    <div class="mr-3">
+                        <div class="">
+                            <img [src]="module.src | assertUrl" class="icon-module" [alt]="module.alt">
+                        </div>
+                    </div>
+                    <div class="font-weight-bold">
+                        <div class="text-truncate">{{module.title}}</div>
+                    </div>
+                </a>
+            </div>
+        <li-->
+
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                <img [src]="homeData.bellSvg.src | assertUrl" [alt]="homeData.bellSvg.alt">
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter">3+</span>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="alertsDropdown"  *ngIf="notificationList">
+                <h6 class="dropdown-header">
+                    notification Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#" *ngFor="let notification  of  notificationList?notificationList.content:null">
+                    <div class="mr-3">
+                        <div class="icon-circle {{notification.messageLevel=='INFO'?'bg-primary':notification.messageLevel=='WARNING'?'bg-warning':'bg-danger'}} ">
+                            <i class="fas fa-file-alt text-white"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="small text-gray-500">{{notification.date | date:'medium'}}</div>
+                        <span class="font-weight-bold">{{notification.content}}</span>
+                    </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+            </div>
+        </li>
+
+        <!-- Nav Item - User Information -->
+        <li class="nav-item dropdown no-arrow">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" [src]="homeData.profilSvg.src | assertUrl" [alt]="homeData.profilSvg.alt">
+            </a>
+            <!-- Dropdown - User Information -->
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <div *ngFor="let profileFunction of profileFuntions">
+                    <div class="dropdown-divider" *ngIf="profileFunction.index == 1"></div>
+                    <a class="dropdown-item" href="{{profileFunction.link | moduleUrl}}"  *ngIf="profileFunction.index != 1" >
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        {{profileFunction.description}}
+                    </a>
+                    <a class="dropdown-item" href="#"  *ngIf="profileFunction.index == 1" data-toggle="modal" data-target="#logoutModal">
+                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                        {{profileFunction.description}}
+                    </a>
+                </div>
+            </div>
+        </li>
+        <!--app-language></app-language-->
+    </ul>
+</nav>
+
+
+
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <div class="modal-body text-center p-3">
+                    <br>
+                    <img  [src]="errorIcon | assertUrl" width="60%" alt="">
+                    <br>
+                    <br>
+                    <p class="h3 font-weight-bold">Oups !</p>
+                    <p class="h5 p-3">{{errorMessage}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark btn-block"  data-dismiss="modal" aria-label="Close">Ok &emsp; <i class="fa fa-chevron-right"></i></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
